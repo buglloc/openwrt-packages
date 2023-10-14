@@ -18,7 +18,7 @@ define Package/fidele
   CATEGORY:=Utilities
   SUBMENU:=Encryption
   TITLE:=Unlock LUKS encrypted disk with an FIDO2 compatible key.
-  DEPENDS:=+cryptsetup +fido2-tools
+#  DEPENDS:=+cryptsetup +fido2-tools
 endef
 
 define Package/fidele/description
@@ -30,14 +30,18 @@ define Package/fidele/conffiles
 /etc/fidele.conf
 endef
 
-define Package/totd/install
+define Build/Compile
+endef
+
+define Package/fidele/install
 	$(INSTALL_DIR) $(1)/usr/share/fidele
 	$(INSTALL_DATA) ./files/usr/share/fidele/utils.sh $(1)/usr/share/fidele/utils.sh
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/fidele-new-passphrase $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/fidele-passphrase $(1)/usr/sbin/
+	$(INSTALL_BIN) ./files/usr/sbin/fidele-luks-open $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/
-	$(INSTALL_CONF) ./etc/fidele.conf $(1)/etc/
+	$(INSTALL_CONF) ./files/etc/fidele.conf $(1)/etc/
 endef
 
 $(eval $(call BuildPackage,fidele))
