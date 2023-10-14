@@ -51,6 +51,7 @@ fido2_new_credential() {
     #  6. attestation signature (base64 blob);
     #  7. attestation certificate, if present (base64 blob).
 
+    echo "Touch Fido2 device button to generate a new credentials" >&2
     credential_id=$(fido2-cred $cred_flags -i $param_file $(fido2_device) | sed -n "5p" || (rm -f $param_file ; exit 1))
     rm -f "$param_file"
     if [ -z "$credential_id" ] ; then
@@ -92,6 +93,7 @@ fido2_print_passphrase() {
     # 5. user id, if credential resident (base64 blob);
     # 6. hmac secret, if the FIDO2 hmac-secret extension is enabled (base64 blob);
 
-    echo $(echo -n "$pin" | setsid fido2-assert $assert_flags -i "$param_file" $(fido2_device) | tail -1 || (rm -f $param_file ; exit 1))
+    echo "Touch Fido2 device button to get passphrase" >&2
+    echo $(echo -n "$FIDELE_PIN" | fido2-assert $assert_flags -i "$param_file" $(fido2_device) | tail -1 || (rm -f $param_file ; exit 1))
     rm -f "$param_file"
 }
