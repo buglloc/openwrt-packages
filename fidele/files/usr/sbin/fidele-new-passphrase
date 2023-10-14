@@ -1,0 +1,7 @@
+#!/bin/sh
+set -euo pipefail
+
+. "${ALTROOT:+${ALTROOT}/}/usr/share/fidele/utils.sh"
+
+fido2_new_credential
+fido2_print_passphrase
