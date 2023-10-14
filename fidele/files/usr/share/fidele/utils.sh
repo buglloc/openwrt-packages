@@ -94,6 +94,6 @@ fido2_print_passphrase() {
     # 6. hmac secret, if the FIDO2 hmac-secret extension is enabled (base64 blob);
 
     echo "Touch Fido2 device button to get passphrase" >&2
-    echo $(echo -n "$FIDELE_PIN" | fido2-assert $assert_flags -i "$param_file" $(fido2_device) | tail -1 || (rm -f $param_file ; exit 1))
+    echo -n $(echo -n "$FIDELE_PIN" | fido2-assert $assert_flags -i "$param_file" $(fido2_device) | tail -1 | base64 -d || (rm -f $param_file ; exit 1))
     rm -f "$param_file"
 }
