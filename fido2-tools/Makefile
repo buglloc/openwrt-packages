@@ -31,7 +31,7 @@ define Package/libfido2
   TITLE:=FIDO2 Library
   URL:=https://github.com/Yubico/libfido2
   ABI_VERSION:=1
-  DEPENDS += +libcbor +libopenssl +libudev +zlib
+  DEPENDS:=+libcbor +libopenssl +libudev +zlib
 endef
 
 define Package/libfido2/description
@@ -46,8 +46,7 @@ define Package/fido2-tools
   SUBMENU:=Encryption
   TITLE:=FIDO2 tools
   URL:=https://github.com/Yubico/libfido2
-  ABI_VERSION:=1
-  DEPENDS += +libfido2
+  DEPENDS:=+libfido2
 endef
 
 define Package/fido2-tools/description
@@ -64,9 +63,16 @@ CMAKE_OPTIONS += \
 	-DLIBFUZZER=OFF \
 	-DUSE_HIDAPI=OFF
 
-define Package/fido2-tools/install
+define Package/libfido2/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libfido2.so.* $(1)/usr/lib/
+endef
+
+define Package/fido2-tools/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fido2-token $(1)/usr/bin/fido2-token
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fido2-assert $(1)/usr/bin/fido2-assert
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/fido2-cred $(1)/usr/bin/fido2-cred
 endef
 
 $(eval $(call BuildPackage,libfido2))
