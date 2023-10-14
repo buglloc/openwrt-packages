@@ -31,22 +31,8 @@ $ git clone https://github.com/buglloc/openwrt-packages.git
 For ease of use, GL.iNet store the SDK separately. You can download the specified SDK by the following command.
 
 ```
-$ sd gl-sdk
-$ ./download.sh
-Usage:
-./download.sh [target]   # Download the appropriate SDK
-
-All available target list:
-    ar71xx-1806     # usb150/ar150/ar300m16/mifi/ar750/ar750s/x750/x1200
-    ath79-1907      # usb150/ar150/ar300m/mifi/ar750/ar750s/x750/x300b/xe300/e750/x1200 openwrt-19.07.7 ath79 target
-    ramips-1806     # mt300n-v2/mt300a/mt300n/n300/vixmini
-    ramips-1907     # mt1300 mt300n-v2/mt300a/mt300n/n300/vixmini
-    ipq806x-qsdk53  # b1300/s1300
-    ipq_ipq40xx-qsdk11  # b1300/s1300/ap1300/b2200 (version 3.201 and above)
-    ipq_ipq60xx-qsdk11  # ax1800
-    mvebu-1907      # mv1000
-    siflower-1806   # sf1200/sft1200
-    ipq807x-2102   # ax1800/axt1800 (version 4.x and above)
+$ cd gl-sdk
+$ ./download.sh ipq807x-2102
 ```
 
 ### Compiling
