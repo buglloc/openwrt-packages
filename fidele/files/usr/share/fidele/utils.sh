@@ -1,15 +1,15 @@
 #!/bin/sh
 
 FIDELE_LUKS_PATH="/usr/share/fidele/fidele.extroot"
-FIDELE_LUKS_LABLE="extroot"
+FIDELE_LUKS_LABEL="extroot"
 FIDELE_ASSERT_PATH="/etc/fidele.f2ap"
 FIDELE_RP="fidele@buglloc"
 FIDELE_USER_NAME="gabriel"
 FIDELE_UP_REQUIRED="true"
 FIDELE_UV_REQUIRED="true"
 
-if [ -r /etc/fidele.conf ]; then
-  . /etc/fidele.conf
+if [ -r "${ALTROOT:+${ALTROOT}/}/etc/fidele.conf" ]; then
+  . "${ALTROOT:+${ALTROOT}/}/etc/fidele.conf"
 fi
 
 base64_blob() {
@@ -69,13 +69,13 @@ fido2_new_credential() {
     echo $FIDELE_RP >> $param_file
     echo $credential_id >> $param_file
     echo $(base64_blob) >> $param_file
-    mv "$param_file" "$FIDELE_ASSERT_PATH"
+    mv "$param_file" "${ALTROOT:+${ALTROOT}/}$FIDELE_ASSERT_PATH"
 }
 
 fido2_print_passphrase() {
     param_file=$(mktemp)
-    client_data_hash=$(dd if=/dev/urandom bs=1 count=32 2> /dev/null | base64)
-    cat "$FIDELE_ASSERT_PATH" | sed "s@#CLIENT_DATA_HASH#@${client_data_hash}@" > $param_file
+    client_data_hash=$(base64_blob)
+    cat "${ALTROOT:+${ALTROOT}/}$FIDELE_ASSERT_PATH" | sed "s@#CLIENT_DATA_HASH#@${client_data_hash}@" > $param_file
 
     assert_flags="-G -h"
     assert_flags="$assert_flags -t up=$FIDELE_UP_REQUIRED"
