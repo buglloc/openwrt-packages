@@ -1,0 +1,43 @@
+#!/bin/sh
+set -euo pipefail
+
+. "${ALTROOT:+${ALTROOT}/}/usr/share/fidele/utils.sh"
+
+msg() {
+    echo "$@" >/dev/kmsg
+}
+
+container="${ALTROOT:+${ALTROOT}/}${FIDELE_LUKS_PATH}"
+if [[ ! -e "$container" ]]; then
+    msg "Unable to view luks container: '${FIDELE_LUKS_PATH}'"
+    exit 1
+fi
+
+if [ -z "${FIDELE_LUKS_LABEL}" ]; then
+    msg "\$FIDELE_LUKS_LABEL is required"
+    exit 1
+fi
+
+msg "Waiting up to 5 seconds for FIDO2 device..."
+for i in $(seq 5 -1 1) ; do
+    if fido2_device > /dev/null ; then
+        break
+    fi
+    sleep 1
+done
+
+msg "Decrypting drive: ${FIDELE_LUKS_LABEL} ($FIDELE_LUKS_PATH)"
+fido2_print_passphrase | cryptsetup luksOpen "$container" "$FIDELE_LUKS_LABEL"
+cs_exit="$?"
+case "$cs_exit" in
+0)  if [ -e "/dev/mapper/${FIDELE_LUKS_LABEL}" ]; then
+        msg "Drive decrypted: ${FIDELE_LUKS_LABEL}"
+    else
+        msg "Drive not found after decrypting: ${FIDELE_LUKS_LABEL}"
+        exit 1
+    fi;;
+5)  msg "Device already exists: ${FIDELE_LUKS_LABEL} (Dmsetup stuck?)"; exit 1;;
+*)  msg "Unable to decrypt drive: ${FIDELE_LUKS_LABEL} ($cs_exit)"; exit 1;;
+esac
+ 
+exit 0
