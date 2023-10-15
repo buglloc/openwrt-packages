@@ -39,5 +39,5 @@ case "$cs_exit" in
 5)  msg "Device already exists: ${FIDELE_LUKS_LABEL} (Dmsetup stuck?)"; exit 1;;
 *)  msg "Unable to decrypt drive: ${FIDELE_LUKS_LABEL} ($cs_exit)"; exit 1;;
 esac
- 
+
 exit 0

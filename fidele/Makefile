@@ -18,7 +18,7 @@ define Package/fidele
   CATEGORY:=Utilities
   SUBMENU:=Encryption
   TITLE:=Unlock LUKS encrypted disk with an FIDO2 compatible key.
-  EXTRA_DEPENDS:=coreutils-base64, sed, cryptsetup, fido2-tools
+  EXTRA_DEPENDS:=openssl-util, sed, cryptsetup, fido2-tools
 endef
 
 define Package/fidele/description
